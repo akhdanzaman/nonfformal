@@ -1,6 +1,12 @@
+from tkinter import *
 import datetime
-import requests, os, random, time,string
+import random, string
 import pandas as pd
+
+root = Tk()
+root.title('Aplikasi Booking Tiket Bioskop')
+root.geometry('300x400')
+
 
 pilihanfilm = ''
 indekss = ""
@@ -32,8 +38,6 @@ def login():
     print('please contact admin')
     session = 0
     return session
-
-session, user = login()
 
 def register():
     userData = pd.read_csv('userdatabase.csv')
@@ -163,18 +167,26 @@ while session != 0:
       print('')
   
   
-  indeksu, filem = pilihfilem()
-  movieinfo()
-  indekskursi,pilihanjam,pilihantanggal = cariindekskursi()
-  kursipilihan = pickseat()
-  kodebayar = pembayaran()
-  rekapbeli()
 
-  print()
-  print()
-  print()
-  print("Success")
-  print()
-  print()
-  print()
-  break
+
+def kliked():
+    mylabel4 = Label(root, text=e.get())
+    mylabel4.pack()
+
+
+e=Entry(root)
+e.pack()
+
+mylabel = Label(root, text='ini label 1')
+mylabel.pack()
+
+
+mybutton = Button(root, 
+                text='Ini button',
+                borderwidth=0,
+                command=kliked,
+                bg = '#296d98',
+                fg = 'white'  )
+mybutton.pack()
+
+mainloop()

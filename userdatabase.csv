@@ -1,4 +1,4 @@
-username,password
-admin,admin
-user1,pasw1
-user2,pasw2
+username,password,namalengkap,nomor
+admin,admin,,
+user1,pasw1,,
+user2,pasw2,,
