@@ -2,13 +2,7 @@ import datetime
 import requests, os, random, time,string
 import pandas as pd
 
-pilihanfilm = ''
-indekss = ""
-user = ""
-nomor = ""
-waktu = ""
-tanggal = ""
-kodebayar = ""
+
 session = 0
 
 
@@ -62,6 +56,7 @@ def register():
 while session != 0:
   
   def indeksfilm(x):
+    global indekss
     daftarfilm = pd.read_csv('film.csv')
     df = pd.DataFrame(daftarfilm)
     
@@ -75,9 +70,15 @@ while session != 0:
     else:
       print()
   def pilihfilem():
+    global filem,indeksu
     filem = input('Film : ')
     print (indeksfilm(filem))
     indeksu = (indeksfilm(filem))
+    movieinfo()
+    cariindekskursi()
+    pickseat()
+    pembayaran()
+    rekapbeli()
     return indeksu,filem
   def movieinfo():
     daftarfilm = pd.read_csv('film.csv')
@@ -94,6 +95,7 @@ while session != 0:
     '''
     print(fullinfo.format(judul,harga,durasi))
   def cariindekskursi():
+    global indekskursi,pilihanjam,pilihantanggal
     pilihantanggal = int(input('pilih tanggal = '))
     pilihanjam = int(input('pilihjam = '))
     datakursi2 = pd.read_csv('datakursi2.csv')
@@ -118,6 +120,7 @@ while session != 0:
     print()
     time = datetime.datetime.now()
   def pickseat():
+    global kursipilihan
     availableseat()
     datakursi = pd.read_csv('datakursi2.csv', index_col='kode')
     dfdk = pd.DataFrame(datakursi)
@@ -141,34 +144,34 @@ while session != 0:
           
     return id
   def rekapbeli():
-      datapembelian = pd.read_csv('datapembelian.csv')
-      dfdt = pd.DataFrame(datapembelian)
+    global nomor
+    datapembelian = pd.read_csv('datapembelian.csv')
+    dfdt = pd.DataFrame(datapembelian)
+    ambildatauser = pd.read_csv('userdatabase.csv',index_col = 'username')
+    dfadu = pd.DataFrame(ambildatauser)
+    nomor = dfadu.loc[user, 'nomor']
+    namalengkap = dfadu.loc[user,'namalengkap']
+    countrow = dfdt.shape[0]
+    nopembelian = f"{(countrow + 1):08d}"
+    waktupembelian = datetime.datetime.now()
+    
+    databelibaru = {'nopembelian' : [nopembelian],
+                'waktupembelian' : [waktupembelian],
+                'user' : [user],
+                'namalengkap' : [namalengkap],
+                'nomor' : [nomor],
+                'judul' : [filem],
+                'waktu' : [pilihanjam],
+                'tanggal' : [pilihantanggal],
+                'kodebayar' : [id],
+                }
+    inputdatapembelian = pd.DataFrame(databelibaru)
+    inputdatapembelian.to_csv('datapembelian.csv', mode='a', index=False, header=False)
 
-      countrow = dfdt.shape[0]
-      nopembelian = f"{(countrow + 1):08d}"
-      waktupembelian = datetime.datetime.now()
-      
-      databelibaru = {'nopembelian' : [nopembelian],
-                  'waktupembelian' : [waktupembelian],
-                  'user' : [user],
-                  'nomor' : [nomor],
-                  'judul' : [filem],
-                  'waktu' : [pilihanjam],
-                  'tanggal' : [pilihantanggal],
-                  'kodebayar' : [kodebayar],
-                  }
-      inputdatapembelian = pd.DataFrame(databelibaru)
-      inputdatapembelian.to_csv('datapembelian.csv', mode='a', index=False, header=False)
-
-      print('')
+    print('')
   
   
-  indeksu, filem = pilihfilem()
-  movieinfo()
-  indekskursi,pilihanjam,pilihantanggal = cariindekskursi()
-  kursipilihan = pickseat()
-  kodebayar = pembayaran()
-  rekapbeli()
+  pilihfilem()
 
   print()
   print()
